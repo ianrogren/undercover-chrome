@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;700;900&display=swap');
+
+/**
+ * Fonts.
+ */
+
+$primary-font: 'Rubik', sans-serif;
+
+/**
+ * Colors.
+ */
+
+// Polar Night
+$polar-dark: #2e3440;
+$polar-medium: #3b4252;
+$polar-light: #434c5e;
+$polar-lightest: #4c566a;
+
+// Snow Storm
+$snow-dark: #d8dee9;
+$snow-medium: #e5e9f0;
+$snow-light: #eceff4;
+
+// Frost
+$frost-dark: #5e81ac;
+$frost-medium: #81a1c1;
+$frost-light: #88c0d0;
+$frost-lightest: #8fbcbb;
+
+// Aurora
+$aurora-red: #bf616a;
+$aurora-orange: #d08770;
+$aurora-yellow: #ebcb8b;
+$aurora-green: #a3be8c;
+$aurora-purple: #b48ead;
+
+/**
+ * Animation Easing & Timing
+ */
+
+$enter-screen: 225ms;
+$leav-screen: 195ms;
+$shorter-duration: 150ms;
+$longer-duration: 300ms;
+$complex-duration: 375ms;
+
+$standard-curve: cubic-bezier(0.4, 0, 0.2, 1);
+$ease-out-curve: cubic-bezier(0, 0, 0.2, 1);
+$acceleration-curve: cubic-bezier(0.4, 0, 1, 1);
+$sharp-curve: cubic-bezier(0.4, 0, 0.6, 1);
+$sharpest-curve: cubic-bezier(0.23, 1, 0.32, 1);
