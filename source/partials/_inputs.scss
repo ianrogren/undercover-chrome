@@ -10,7 +10,7 @@ input[type='checkbox'] {
   position: relative;
   cursor: pointer;
 
-  &:before {
+  &::before {
     display: none;
   }
 
@@ -19,7 +19,7 @@ input[type='checkbox'] {
     transition: $longer-duration $ease-out-curve;
     outline: none;
 
-    &:before {
+    &::before {
       display: block;
       font-family: 'Font Awesome 5 Free';
       content: '\f00c';

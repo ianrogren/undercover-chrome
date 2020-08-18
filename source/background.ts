@@ -4,24 +4,28 @@
  * @format
  */
 
+interface Window {
+  chrome: any;
+}
+
 interface Domain {
   url: string;
   hide: boolean;
 }
 
-chrome.webNavigation.onBeforeNavigate.addListener((event): void => {
-  chrome.storage.sync.get(
+window.chrome.webNavigation.onBeforeNavigate.addListener((event): void => {
+  window.chrome.storage.sync.get(
     'domainList',
     (results: Record<string, Array<Domain>>) => {
       const domainList: Array<Domain> = results.domainList;
       domainList.forEach((domain: Domain): void => {
-        if (event.url.includes(domain.url)) {
-          chrome.windows.create({
+        if (domain.url !== '' && event.url.includes(domain.url)) {
+          window.chrome.windows.create({
             url: event.url,
             incognito: true,
           });
           if (domain.hide) {
-            chrome.tabs.remove(event.tabId);
+            window.chrome.tabs.remove(event.tabId);
           }
         }
       });
