@@ -2,14 +2,11 @@
   "name": "undercover",
   "version": "1.0.0",
   "description": "Undercover - A Chrome extension that allows you to autimacally open sites from specific domains in incogneto mode.",
-  "main": "background.js",
-  "scripts": {
-    "style:watch": "sass --watch options.scss:options.css --style compressed"
-  },
+  "main": "options.html",
   "keywords": [],
   "author": "Ian Rogren",
   "license": "ISC",
-  "devDependencies": {
-    "sass": "^1.26.3"
+  "dependencies": {
+    "core-js": "^3.6.5"
   }
 }
