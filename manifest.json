@@ -1,7 +1,6 @@
 {
   "name": "Undercover",
   "version": "1.0.0",
-  "default_locale": "en",
   "description": "A Chrome extension that allows you to automatically redirect pages to incognito based off a domain.",
   "permissions": ["storage", "windows", "webNavigation"],
   "background": {
