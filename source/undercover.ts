@@ -4,37 +4,37 @@
  * @format
  */
 
-import 'core-js/modules/es.array.for-each';
-import 'core-js/modules/es.array.concat';
-import './options.scss';
+import "core-js/modules/es.array.for-each";
+import "core-js/modules/es.array.concat";
+import "./options.scss";
 
 interface DomainSelection {
   url: string;
   hide: boolean;
 }
 
-document.addEventListener('DOMContentLoaded', (): void => {
+document.addEventListener("DOMContentLoaded", (): void => {
   /**
    * Create Field Group.
    */
   const createFieldGroup = (domain: DomainSelection): HTMLElement => {
-    const optionFieldGroup: HTMLElement = document.createElement('div');
+    const optionFieldGroup: HTMLElement = document.createElement("div");
     const hideValue: string =
-      typeof domain.hide !== 'undefined' && domain.hide ? 'checked' : '';
-    optionFieldGroup.classList.add('field-group');
+      typeof domain.hide !== "undefined" && domain.hide ? "checked" : "";
+    optionFieldGroup.classList.add("field-group");
     optionFieldGroup.innerHTML =
-      '<label>Add Domain</label>' +
+      "<label>Add Domain</label>" +
       '<input type="text" class="input is-info" value="' +
       domain.url +
       '" />' +
       '<span class="close-button">' +
       '<i class="fas fa-times"></i>' +
-      '</span>' +
-      '<p>' +
+      "</span>" +
+      "<p>" +
       '<input type="checkbox" class="hide-tab" ' +
       hideValue +
-      ' /> Close original non-incognito tab.' +
-      '</p>';
+      " /> Close original non-incognito tab." +
+      "</p>";
     return optionFieldGroup;
   };
 
@@ -43,10 +43,10 @@ document.addEventListener('DOMContentLoaded', (): void => {
    */
   const resetInputs = (): void => {
     const closeButtons: NodeListOf<HTMLElement> = document.querySelectorAll(
-      '.close-button'
+      ".close-button"
     );
     [].forEach.call(closeButtons, (closeSpan: HTMLElement): void => {
-      closeSpan.addEventListener('click', (): void => {
+      closeSpan.addEventListener("click", (): void => {
         closeSpan.parentElement?.remove();
       });
     });
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', (): void => {
    */
   const buildInput = (domain: DomainSelection): void => {
     const domainContainer: HTMLElement | null = document.querySelector(
-      '.domain-container'
+      ".domain-container"
     );
     if (domainContainer) {
       const fieldGroup = createFieldGroup(domain);
@@ -70,12 +70,12 @@ document.addEventListener('DOMContentLoaded', (): void => {
    * Load Domains.
    */
   const loadDomains = (): void => {
-    window.chrome.storage.sync.get('domainList', (results) => {
+    window.chrome.storage.sync.get("domainList", (results) => {
       const { domainList } = results;
       [].forEach.call(domainList, (domain) => {
         buildInput(domain);
       });
-      buildInput({ url: '', hide: false });
+      buildInput({ url: "", hide: false });
     });
   };
 
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', (): void => {
    */
   const clearDomainList = (): void => {
     const fieldGroups: NodeListOf<HTMLElement> = document.querySelectorAll(
-      '.field-group'
+      ".field-group"
     );
     [].forEach.call(fieldGroups, (group: HTMLElement) => {
       group.remove();
@@ -96,18 +96,18 @@ document.addEventListener('DOMContentLoaded', (): void => {
    */
   const saveDomains = (): void => {
     const fieldGroups: NodeListOf<HTMLElement> = document.querySelectorAll(
-      '.domain-container .field-group'
+      ".domain-container .field-group"
     );
     const domainArray: Array<DomainSelection> = [];
     [].forEach.call(fieldGroups, (group: HTMLElement): void => {
       const domainName: HTMLInputElement | null = group.querySelector(
-        'input[type=text]'
+        "input[type=text]"
       );
       const hideTab: HTMLInputElement | null = group.querySelector(
-        'input[type=checkbox]'
+        "input[type=checkbox]"
       );
 
-      if (domainName && domainName.value !== '' && hideTab) {
+      if (domainName && domainName.value !== "" && hideTab) {
         const domainData = {
           url: domainName.value,
           hide: hideTab.checked,
@@ -127,12 +127,12 @@ document.addEventListener('DOMContentLoaded', (): void => {
   const darkModeCheck = (): void => {
     if (
       window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches
+      window.matchMedia("(prefers-color-scheme: dark)").matches
     ) {
       const htmlRoot: HTMLElement | null = document.getElementsByTagName(
-        'html'
+        "html"
       )[0];
-      htmlRoot.classList.add('dark-mode');
+      htmlRoot.classList.add("dark-mode");
     }
   };
 
@@ -140,19 +140,19 @@ document.addEventListener('DOMContentLoaded', (): void => {
    * Initialize Options.
    */
   const initializeOptions = (): void => {
-    const saveButton: HTMLElement | null = document.getElementById('save');
+    const saveButton: HTMLElement | null = document.getElementById("save");
     if (saveButton) {
-      saveButton.addEventListener('click', (event: MouseEvent): void => {
+      saveButton.addEventListener("click", (event: MouseEvent): void => {
         event.preventDefault();
         saveDomains();
       });
     }
 
-    const addButton: HTMLElement | null = document.getElementById('add');
+    const addButton: HTMLElement | null = document.getElementById("add");
     if (addButton) {
-      addButton.addEventListener('click', (event: MouseEvent) => {
+      addButton.addEventListener("click", (event: MouseEvent) => {
         event.preventDefault();
-        buildInput({ url: '', hide: false });
+        buildInput({ url: "", hide: false });
       });
     }
 
