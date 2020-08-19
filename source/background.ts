@@ -4,10 +4,6 @@
  * @format
  */
 
-interface Window {
-  chrome: any;
-}
-
 interface Domain {
   url: string;
   hide: boolean;
@@ -15,11 +11,11 @@ interface Domain {
 
 window.chrome.webNavigation.onBeforeNavigate.addListener((event): void => {
   window.chrome.storage.sync.get(
-    'domainList',
+    "domainList",
     (results: Record<string, Array<Domain>>) => {
       const domainList: Array<Domain> = results.domainList;
       domainList.forEach((domain: Domain): void => {
-        if (domain.url !== '' && event.url.includes(domain.url)) {
+        if (domain.url !== "" && event.url.includes(domain.url)) {
           window.chrome.windows.create({
             url: event.url,
             incognito: true,

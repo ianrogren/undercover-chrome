@@ -3,17 +3,10 @@
  *
  * @format
  */
-/* eslint no-console: ["error", { allow: ["warn", "error"] }] */
 
 import 'core-js/modules/es.array.for-each';
 import 'core-js/modules/es.array.concat';
 import './options.scss';
-
-declare global {
-  interface Window {
-    chrome: any;
-  }
-}
 
 interface DomainSelection {
   url: string;
@@ -24,16 +17,15 @@ document.addEventListener('DOMContentLoaded', (): void => {
   /**
    * Create Field Group.
    */
-  const createFieldGroup = (
-    domainValue: string,
-    hideValue: string
-  ): HTMLElement => {
+  const createFieldGroup = (domain: DomainSelection): HTMLElement => {
     const optionFieldGroup: HTMLElement = document.createElement('div');
+    const hideValue: string =
+      typeof domain.hide !== 'undefined' && domain.hide ? 'checked' : '';
     optionFieldGroup.classList.add('field-group');
     optionFieldGroup.innerHTML =
       '<label>Add Domain</label>' +
       '<input type="text" class="input is-info" value="' +
-      domainValue +
+      domain.url +
       '" />' +
       '<span class="close-button">' +
       '<i class="fas fa-times"></i>' +
@@ -55,7 +47,7 @@ document.addEventListener('DOMContentLoaded', (): void => {
     );
     [].forEach.call(closeButtons, (closeSpan: HTMLElement): void => {
       closeSpan.addEventListener('click', (): void => {
-        closeSpan.parentElement.remove();
+        closeSpan.parentElement?.remove();
       });
     });
   };
@@ -63,16 +55,12 @@ document.addEventListener('DOMContentLoaded', (): void => {
   /**
    * Build Input.
    */
-  const buildInput = (domain): void => {
-    const domainContainer: HTMLElement = document.querySelector(
+  const buildInput = (domain: DomainSelection): void => {
+    const domainContainer: HTMLElement | null = document.querySelector(
       '.domain-container'
     );
-    const domainValue: string = domain === 'empty' ? '' : domain.url;
-    const hideValue: string =
-      typeof domain.hide !== 'undefined' && domain.hide ? 'checked' : '';
-
     if (domainContainer) {
-      const fieldGroup = createFieldGroup(domainValue, hideValue);
+      const fieldGroup = createFieldGroup(domain);
       domainContainer.appendChild(fieldGroup);
       resetInputs();
     }
@@ -87,7 +75,7 @@ document.addEventListener('DOMContentLoaded', (): void => {
       [].forEach.call(domainList, (domain) => {
         buildInput(domain);
       });
-      buildInput('empty');
+      buildInput({ url: '', hide: false });
     });
   };
 
@@ -98,7 +86,7 @@ document.addEventListener('DOMContentLoaded', (): void => {
     const fieldGroups: NodeListOf<HTMLElement> = document.querySelectorAll(
       '.field-group'
     );
-    [].forEach.call(fieldGroups, (group) => {
+    [].forEach.call(fieldGroups, (group: HTMLElement) => {
       group.remove();
     });
   };
@@ -112,14 +100,14 @@ document.addEventListener('DOMContentLoaded', (): void => {
     );
     const domainArray: Array<DomainSelection> = [];
     [].forEach.call(fieldGroups, (group: HTMLElement): void => {
-      const domainName: HTMLInputElement = group.querySelector(
+      const domainName: HTMLInputElement | null = group.querySelector(
         'input[type=text]'
       );
-      const hideTab: HTMLInputElement = group.querySelector(
+      const hideTab: HTMLInputElement | null = group.querySelector(
         'input[type=checkbox]'
       );
 
-      if (domainName !== null && domainName.value !== '') {
+      if (domainName && domainName.value !== '' && hideTab) {
         const domainData = {
           url: domainName.value,
           hide: hideTab.checked,
@@ -128,12 +116,8 @@ document.addEventListener('DOMContentLoaded', (): void => {
       }
     });
     window.chrome.storage.sync.set({ domainList: domainArray }, function () {
-      if (window.chrome.runtime.error) {
-        console.warn('Domains were not saved.');
-      } else {
-        clearDomainList();
-        loadDomains();
-      }
+      clearDomainList();
+      loadDomains();
     });
   };
 
@@ -145,7 +129,9 @@ document.addEventListener('DOMContentLoaded', (): void => {
       window.matchMedia &&
       window.matchMedia('(prefers-color-scheme: dark)').matches
     ) {
-      const htmlRoot: HTMLElement = document.getElementsByTagName('html')[0];
+      const htmlRoot: HTMLElement | null = document.getElementsByTagName(
+        'html'
+      )[0];
       htmlRoot.classList.add('dark-mode');
     }
   };
@@ -154,17 +140,21 @@ document.addEventListener('DOMContentLoaded', (): void => {
    * Initialize Options.
    */
   const initializeOptions = (): void => {
-    const saveButton: HTMLElement = document.getElementById('save');
-    saveButton.addEventListener('click', (event: MouseEvent): void => {
-      event.preventDefault();
-      saveDomains();
-    });
+    const saveButton: HTMLElement | null = document.getElementById('save');
+    if (saveButton) {
+      saveButton.addEventListener('click', (event: MouseEvent): void => {
+        event.preventDefault();
+        saveDomains();
+      });
+    }
 
-    const addButton: HTMLElement = document.getElementById('add');
-    addButton.addEventListener('click', (event: MouseEvent) => {
-      event.preventDefault();
-      buildInput('empty');
-    });
+    const addButton: HTMLElement | null = document.getElementById('add');
+    if (addButton) {
+      addButton.addEventListener('click', (event: MouseEvent) => {
+        event.preventDefault();
+        buildInput({ url: '', hide: false });
+      });
+    }
 
     darkModeCheck();
     loadDomains();
